@@ -2,20 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
 
+  <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
   <artifactId>Slanga</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Slanga</name>
-  <description>Slönguspil verkefni fyrir HBV202G</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
+    <javafx.version>17.0.2</javafx.version>
     <junit.version>5.9.2</junit.version>
-    <javafx.version>21-ea+5</javafx.version>
   </properties>
 
   <dependencies>
@@ -48,14 +45,17 @@
 
   <build>
     <plugins>
-      <!-- Compiler plugin -->
+      <!-- Compiler plugin for JDK 11 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
+        <configuration>
+          <release>21</release>
+        </configuration>
       </plugin>
 
-      <!-- JavaFX plugin -->
+      <!-- JavaFX plugin (optional) -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
@@ -64,14 +64,14 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.example.slanga/vinnsla.SlangaApplication</mainClass>
+              <mainClass>vinnsla.SlangaApplication</mainClass>
               <launcher>app</launcher>
             </configuration>
           </execution>
         </executions>
       </plugin>
 
-      <!-- Exec plugin -->
+      <!-- Run plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -81,7 +81,7 @@
         </configuration>
       </plugin>
 
-      <!-- Site & Javadoc -->
+      <!-- Site and Javadoc -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -93,7 +93,7 @@
         <version>3.6.3</version>
       </plugin>
 
-      <!-- Fat jar assembly -->
+      <!-- Assembly plugin to create fat jar -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
