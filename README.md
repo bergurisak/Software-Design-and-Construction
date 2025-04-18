@@ -12,6 +12,6 @@ JUnit prófanir hafa verið gerðar fyrir leikmann, leikinn sjálfan, slöngur o
 
 Verkefnið notar einnig observer hönnunarmynstur til að uppfæra viðmót þegar breytingar verða á leikstöðu.
 
-UML klassarit fylgir verkefninu í docs/ möppunni. Þar má finna bæði PlantUML skránna og myndina sem sýnir tengsl klasanna og hlutverk þeirra.
+UML klassarit fylgir verkefninu í design/ möppunni. Þar má finna bæði PlantUML skránna og myndina sem sýnir tengsl klasanna og hlutverk þeirra.
 
 Höfundur verkefnisins er Bergur og verkefnið var unnið í tengslum við áfangann HBV202G Software Design and Construction vorið 2025. 
