@@ -1,4 +1,4 @@
-package com.example.slanga;
+package vinnsla;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

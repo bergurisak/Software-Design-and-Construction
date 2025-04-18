@@ -1,4 +1,4 @@
-package Vinnsla;
+package vinnsla;
 
 import javafx.beans.property.*;
 
@@ -23,9 +23,9 @@ public class Leikur {
      * @return `true` ef leik er lokið, annars `false`.
      */
     public boolean leikaLeik() {
-        if (leikLokid.get()) return false; // Leikur er þegar búinn
+        if (leikLokid.get()) return false;
 
-        teningur.kasta(); // Kasta tening
+        teningur.kasta();
         int kasta = teningur.getTala();
         Leikmadur leikmadur = leikmenn[nuverandiLeikmadur.get()];
         int nyReitur = leikmadur.getReitur() + kasta;

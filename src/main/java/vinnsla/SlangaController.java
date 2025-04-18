@@ -1,4 +1,4 @@
-package com.example.slanga;
+package vinnsla;
 
 
 import javafx.beans.binding.Bindings;
@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.Image;
-import Vinnsla.Leikur;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -37,11 +37,10 @@ public class SlangaController {
     @FXML
     private void initialize() throws FileNotFoundException {
 
-        fxTeningurMynd.setImage(new Image(getClass().getResource("/com/example/slanga/css/Myndir/dice-one.png").toExternalForm()));
+        fxTeningurMynd.setImage(new Image(getClass().getResource("/vinnsla/css/Myndir/dice-one.png").toExternalForm()));
         gridmap = new Point2D[25];
         int counter = 1;
         for (int i = fxBord.getRowCount()-1; i >= 0 ; i-- ) {
-            System.out.println( i % 2 );
             if ( ( i % 2 ) == 1 ) {
                 for (int j = 0; j < fxBord.getColumnCount(); j++) {
                     gridmap[counter] = new Point2D(i, j);
@@ -79,10 +78,14 @@ public class SlangaController {
         fxSkilabod2.textProperty().bind(
                 Bindings.when(leikur.leikLokidProperty())
                         .then(leikur.sigurvegariProperty())
-                        .otherwise(Bindings.concat("Næstur: ", leikur.getLeikmadur(leikur.nuverandiLeikmadurProperty().get()).nafnProperty()))
+                        .otherwise(
+                                Bindings.createStringBinding(
+                                        () -> "Næstur: " + leikur.getLeikmadur(leikur.nuverandiLeikmadurProperty().get()).getNafn(),
+                                        leikur.nuverandiLeikmadurProperty()
+                                )
+                        )
         );
-
-        // Setja upp listener fyrir leikmannahreyfingar
+        // listener fyrir leikmannahreyfingar
         leikur.getLeikmadur(0).reiturProperty().addListener((obs, oldValue, newValue) -> uppfaeraBord());
         leikur.getLeikmadur(1).reiturProperty().addListener((obs, oldValue, newValue) -> uppfaeraBord());
         uppfaeraBord();
@@ -103,7 +106,7 @@ public class SlangaController {
     private void teningurHandler() {
         leikur.leikaLeik();
         int gildi = leikur.getTeningur().getTala();
-        String myndPath = String.format("/com/example/slanga/css/Myndir/dice-%s.png", talaIStreng(gildi));
+        String myndPath = String.format("/vinnsla/css/Myndir/dice-%s.png", talaIStreng(gildi));
         fxTeningurMynd.setImage(new Image(getClass().getResource(myndPath).toExternalForm()));
         uppfaeraBord();
     }
@@ -130,14 +133,12 @@ public class SlangaController {
             Label label = (Label) getNodeByRowColumnIndex((int) inGridPoint.getX(), (int) inGridPoint.getY(), fxBord);
 
             if (leikur.getSlongurStigar().erStigi(reiturNr)) {
-                System.out.println(String.format("Er að teikna stiga í reit : %d", reiturNr));
-                ImageView stigiMynd = new ImageView(new Image(getClass().getResource("/com/example/slanga/css/Myndir/greenLadder.png").toExternalForm()));
+                ImageView stigiMynd = new ImageView(new Image(getClass().getResource("/vinnsla/css/Myndir/greenLadder.png").toExternalForm()));
                 stigiMynd.setFitWidth(60);
                 stigiMynd.setFitHeight(60);
                 label.setGraphic(stigiMynd);
             } else if (leikur.getSlongurStigar().erSlanga(reiturNr)) {
-                System.out.println(String.format("Er að teikna slöngu í reit : %d", reiturNr));
-                ImageView slonguMynd = new ImageView(new Image(getClass().getResource("/com/example/slanga/css/Myndir/snake.png").toExternalForm()));
+                ImageView slonguMynd = new ImageView(new Image(getClass().getResource("/vinnsla/css/Myndir/snake.png").toExternalForm()));
                 slonguMynd.setFitWidth(60);
                 slonguMynd.setFitHeight(60);
                 label.setGraphic(slonguMynd);
@@ -148,13 +149,11 @@ public class SlangaController {
         int reitur2 = leikur.getLeikmadur(1).getReitur();
 
         if (reitur1 >= 0) {
-            System.out.println(String.format("Leikmaður 1 er í reit : %d", reitur1));
             Point2D inGridPoint = gridmap[reitur1];
             Label label = (Label) getNodeByRowColumnIndex((int) inGridPoint.getX(), (int) inGridPoint.getY(), fxBord);
             label.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         }
         if (reitur2 >= 0) {
-            System.out.println(String.format("Leikmaður 2 er í reit : %d", reitur2));
             Point2D inGridPoint = gridmap[reitur2];
             Label label = (Label) getNodeByRowColumnIndex((int) inGridPoint.getX(), (int) inGridPoint.getY(), fxBord);
             label.setStyle("-fx-background-color: red; -fx-text-fill: black;");

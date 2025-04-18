@@ -64,7 +64,7 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.example.slanga/com.example.slanga.SlangaApplication</mainClass>
+              <mainClass>com.example.slanga/vinnsla.SlangaApplication</mainClass>
               <launcher>app</launcher>
             </configuration>
           </execution>
@@ -77,7 +77,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
-          <mainClass>com.example.slanga.SlangaApplication</mainClass>
+          <mainClass>vinnsla.SlangaApplication</mainClass>
         </configuration>
       </plugin>
 
@@ -104,7 +104,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.example.slanga.SlangaApplication</mainClass>
+              <mainClass>vinnsla.SlangaApplication</mainClass>
             </manifest>
           </archive>
         </configuration>

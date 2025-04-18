@@ -3,6 +3,6 @@ module com.example.slanga {
     requires javafx.fxml;
 
 
-    opens com.example.slanga to javafx.fxml;
-    exports com.example.slanga;
+    opens vinnsla to javafx.fxml;
+    exports vinnsla;
 }
