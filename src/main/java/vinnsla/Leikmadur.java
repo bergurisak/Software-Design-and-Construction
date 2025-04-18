@@ -52,15 +52,4 @@ public class Leikmadur {
     public int getReitur() {
         return reitur.get();
     }
-
-    public static void main(String[] args) {
-        Leikmadur l = new Leikmadur("Bergur");
-        System.out.println(l.getNafn() + " er á reit: " + l.getReitur());
-
-        l.faera(5, 24);
-        System.out.println(l.getNafn() + " færður á reit: " + l.getReitur());
-
-        l.faera(25, 24); // Prófum að fara yfir max
-        System.out.println(l.getNafn() + " er nú á lokareit: " + l.getReitur());
-    }
 }

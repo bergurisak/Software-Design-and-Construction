@@ -1,10 +1,8 @@
 package vinnsla;
 
-
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -15,91 +13,98 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public class SlangaController {
-    @FXML
-    private GridPane fxBord;  // Borðið (4x6 reitir)
-    @FXML
-    private Label fxSkilabod1; // Skilaboð um slöngur/stiga
-    @FXML
-    private Label fxSkilabod2; // Hver á leikinn / Sigurvegari
-    @FXML
-    private Button fxTeningur; // Kasta teningi hnappur
-    @FXML
-    private Button fxNyrLeikur; // Nýr leikur hnappur
-    @FXML
-    private ImageView fxTeningurMynd;
 
+    @FXML private GridPane fxBord;
+    @FXML private Label fxSkilabod1;
+    @FXML private Label fxSkilabod2;
+    @FXML private Button fxTeningur;
+    @FXML private Button fxNyrLeikur;
+    @FXML private ImageView fxTeningurMynd;
 
-    private Leikur leikur; // Leikurinn
-    private List<javafx.scene.Node> reitir; // Listi af reitum í GridPane
-
-    private Point2D gridmap[];
+    private Leikur leikur;
+    private List<javafx.scene.Node> reitir;
+    private final Point2D[] gridmap = new Point2D[25];
 
     @FXML
     private void initialize() throws FileNotFoundException {
+        setjaUppGridMap();
+        leikur = new Leikur(4, 6);
+        reitir = fxBord.getChildren();
 
-        fxTeningurMynd.setImage(new Image(getClass().getResource("/vinnsla/css/Myndir/dice-one.png").toExternalForm()));
-        gridmap = new Point2D[25];
+        buaTilReiti();
+        bindaViðLeik();
+        setjaUpplýsingar();
+        uppfaeraBord();
+
+        fxTeningurMynd.setImage(
+                new Image(getClass().getResource("/vinnsla/css/Myndir/dice-one.png").toExternalForm())
+        );
+    }
+
+    private void setjaUppGridMap() {
         int counter = 1;
-        for (int i = fxBord.getRowCount()-1; i >= 0 ; i-- ) {
-            if ( ( i % 2 ) == 1 ) {
+        for (int i = fxBord.getRowCount() - 1; i >= 0; i--) {
+            if (i % 2 == 1) {
                 for (int j = 0; j < fxBord.getColumnCount(); j++) {
-                    gridmap[counter] = new Point2D(i, j);
-                    counter++;
+                    gridmap[counter++] = new Point2D(i, j);
                 }
-            }
-            else{
-                for (int j = fxBord.getColumnCount()-1; j >= 0; j--) {
-                    gridmap[counter]= new Point2D(i,j);
-                    counter++;
+            } else {
+                for (int j = fxBord.getColumnCount() - 1; j >= 0; j--) {
+                    gridmap[counter++] = new Point2D(i, j);
                 }
             }
         }
+    }
 
-        leikur = new Leikur(4, 6); // Búa til nýjan leik
-        reitir = fxBord.getChildren(); // Ná í reitina á borðinu
-        for (int i = fxBord.getRowCount()-1; i >= 0 ; i-- ) {
-          for (int j = 0; j < fxBord.getColumnCount(); j++ ){
-              Label ble = new Label("");
-              ble.setMaxHeight(Double.MAX_VALUE);
-              ble.setMaxWidth(Double.MAX_VALUE);
-              ble.setStyle("-fx-background-color: green" );
-              fxBord.setConstraints (ble, j, i);
-              fxBord.getChildren().add(ble);
-          }
-        }
-        // Binda hnappa við leikstöðu
+    private void bindaViðLeik() {
         fxNyrLeikur.disableProperty().bind(leikur.leikLokidProperty().not());
         fxTeningur.disableProperty().bind(leikur.leikLokidProperty());
         fxTeningur.textProperty().bind(leikur.getTeningur().getTalaProperty().asString());
+    }
 
+    private void setjaUpplýsingar() {
+        fxSkilabod1.textProperty().bind(
+                leikur.getLeikmadur(0).reiturProperty().asString("Reitur: %d")
+        );
 
-        // Binda skilaboðasvæði við vinnslu
-        fxSkilabod1.textProperty().bind(leikur.getLeikmadur(0).reiturProperty().asString("Reitur: %d"));
         fxSkilabod2.textProperty().bind(
                 Bindings.when(leikur.leikLokidProperty())
                         .then(leikur.sigurvegariProperty())
                         .otherwise(
                                 Bindings.createStringBinding(
-                                        () -> "Næstur: " + leikur.getLeikmadur(leikur.nuverandiLeikmadurProperty().get()).getNafn(),
+                                        () -> "Næstur: " +
+                                                leikur.getLeikmadur(leikur.nuverandiLeikmadurProperty().get()).getNafn(),
                                         leikur.nuverandiLeikmadurProperty()
                                 )
                         )
         );
-        // listener fyrir leikmannahreyfingar
-        leikur.getLeikmadur(0).reiturProperty().addListener((obs, oldValue, newValue) -> uppfaeraBord());
-        leikur.getLeikmadur(1).reiturProperty().addListener((obs, oldValue, newValue) -> uppfaeraBord());
-        uppfaeraBord();
+
+        leikur.getLeikmadur(0).reiturProperty().addListener((obs, oldVal, newVal) -> uppfaeraBord());
+        leikur.getLeikmadur(1).reiturProperty().addListener((obs, oldVal, newVal) -> uppfaeraBord());
     }
-    private String talaIStreng(int tala) {
-        switch (tala) {
-            case 1: return "one";
-            case 2: return "two";
-            case 3: return "three";
-            case 4: return "four";
-            case 5: return "five";
-            case 6: return "six";
-            default: return "one";
+
+    private void buaTilReiti() {
+        for (int i = fxBord.getRowCount() - 1; i >= 0; i--) {
+            for (int j = 0; j < fxBord.getColumnCount(); j++) {
+                Label reiturLabel = new Label("");
+                reiturLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                reiturLabel.setStyle("-fx-background-color: green");
+                fxBord.setConstraints(reiturLabel, j, i);
+                fxBord.getChildren().add(reiturLabel);
+            }
         }
+    }
+
+    private String talaIStreng(int tala) {
+        return switch (tala) {
+            case 1 -> "one";
+            case 2 -> "two";
+            case 3 -> "three";
+            case 4 -> "four";
+            case 5 -> "five";
+            case 6 -> "six";
+            default -> "one";
+        };
     }
 
     @FXML
@@ -114,23 +119,19 @@ public class SlangaController {
     @FXML
     private void nyrLeikurHandler() {
         leikur.nyrLeikur();
+        fxTeningurMynd.setImage(new Image(getClass().getResource("/vinnsla/css/Myndir/dice-one.png").toExternalForm()));
         uppfaeraBord();
     }
 
     /**
-     * Uppfærir borðið með stöðu leikmanna.
+     * Uppfærir stöðu reita og leikmanna á borði.
      */
     private void uppfaeraBord() {
-        for (javafx.scene.Node reitur : reitir) {
-            if (reitur instanceof Label label) {
-                label.setStyle("-fx-background-color: white;");
-                label.setGraphic(null); // Fjarlægja eldri mynd ef til staðar
-            }
-        }
+        hreinsaReiti();
 
         for (int reiturNr = 1; reiturNr < 25; reiturNr++) {
-            Point2D inGridPoint = gridmap[reiturNr];
-            Label label = (Label) getNodeByRowColumnIndex((int) inGridPoint.getX(), (int) inGridPoint.getY(), fxBord);
+            Point2D pos = gridmap[reiturNr];
+            Label label = (Label) getNodeByRowColumnIndex((int) pos.getX(), (int) pos.getY(), fxBord);
 
             if (leikur.getSlongurStigar().erStigi(reiturNr)) {
                 ImageView stigiMynd = new ImageView(new Image(getClass().getResource("/vinnsla/css/Myndir/greenLadder.png").toExternalForm()));
@@ -138,43 +139,50 @@ public class SlangaController {
                 stigiMynd.setFitHeight(60);
                 label.setGraphic(stigiMynd);
             } else if (leikur.getSlongurStigar().erSlanga(reiturNr)) {
-                ImageView slonguMynd = new ImageView(new Image(getClass().getResource("/vinnsla/css/Myndir/snake.png").toExternalForm()));
-                slonguMynd.setFitWidth(60);
-                slonguMynd.setFitHeight(60);
-                label.setGraphic(slonguMynd);
+                ImageView slangaMynd = new ImageView(new Image(getClass().getResource("/vinnsla/css/Myndir/snake.png").toExternalForm()));
+                slangaMynd.setFitWidth(60);
+                slangaMynd.setFitHeight(60);
+                label.setGraphic(slangaMynd);
             }
         }
 
+        teiknaLeikmenn();
+    }
+
+    private void hreinsaReiti() {
+        for (javafx.scene.Node reitur : reitir) {
+            if (reitur instanceof Label label) {
+                label.setStyle("-fx-background-color: white;");
+                label.setGraphic(null);
+            }
+        }
+    }
+
+    private void teiknaLeikmenn() {
         int reitur1 = leikur.getLeikmadur(0).getReitur();
         int reitur2 = leikur.getLeikmadur(1).getReitur();
 
         if (reitur1 >= 0) {
-            Point2D inGridPoint = gridmap[reitur1];
-            Label label = (Label) getNodeByRowColumnIndex((int) inGridPoint.getX(), (int) inGridPoint.getY(), fxBord);
+            Point2D pos = gridmap[reitur1];
+            Label label = (Label) getNodeByRowColumnIndex((int) pos.getX(), (int) pos.getY(), fxBord);
             label.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         }
+
         if (reitur2 >= 0) {
-            Point2D inGridPoint = gridmap[reitur2];
-            Label label = (Label) getNodeByRowColumnIndex((int) inGridPoint.getX(), (int) inGridPoint.getY(), fxBord);
+            Point2D pos = gridmap[reitur2];
+            Label label = (Label) getNodeByRowColumnIndex((int) pos.getX(), (int) pos.getY(), fxBord);
             label.setStyle("-fx-background-color: red; -fx-text-fill: black;");
         }
     }
 
-
-    private javafx.scene.Node getNodeByRowColumnIndex (final int row, final int column, GridPane gridPane) {
-        javafx.scene.Node result = null;
-        javafx.collections.ObservableList<javafx.scene.Node> childrens = gridPane.getChildren();
-
-        for (javafx.scene.Node node : childrens) {
-            if ( node.getClass() != Label.class ) {
-                continue;
-            }
-            if(gridPane.getRowIndex(node) == row && gridPane.getColumnIndex(node) == column) {
-                result = node;
-                break;
+    private javafx.scene.Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
+        for (javafx.scene.Node node : gridPane.getChildren()) {
+            if (node instanceof Label &&
+                    GridPane.getRowIndex(node) == row &&
+                    GridPane.getColumnIndex(node) == column) {
+                return node;
             }
         }
-
-        return result;
+        return null;
     }
 }
