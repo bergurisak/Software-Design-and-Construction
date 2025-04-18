@@ -1,0 +1,59 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Leikur {
+  - leikmenn: Leikmadur[2]
+  - teningur: Teningur
+  - slongurStigar: SlongurStigar
+  - nuverandiLeikmadur: int
+  - leikLokid: boolean
+  - sigurvegari: String
+  + leikaLeik(): boolean
+  + nyrLeikur(): void
+  + getLeikmadur(i: int): Leikmadur
+}
+
+class Leikmadur {
+  - nafn: String
+  - reitur: int
+  + faera(nyReitur: int, max: int): void
+  + getNafn(): String
+  + getReitur(): int
+}
+
+class Teningur {
+  - tala: int
+  + kasta(): void
+  + getTala(): int
+}
+
+class SlongurStigar {
+  - slongurStigar: Map<int, int>
+  + faLendingarReit(reitur: int): int
+  + erSlanga(reitur: int): boolean
+  + erStigi(reitur: int): boolean
+}
+
+class SlangaController {
+  - fxBord: GridPane
+  - fxSkilabod1: Label
+  - fxSkilabod2: Label
+  - fxTeningur: Button
+  - leikur: Leikur
+  + initialize(): void
+  + uppfaeraBord(): void
+  + teningurHandler(): void
+  + nyrLeikurHandler(): void
+}
+
+class SlangaApplication {
+  + start(stage: Stage): void
+}
+
+Leikur "1" --> "*" Leikmadur
+Leikur --> Teningur
+Leikur --> SlongurStigar
+SlangaController --> Leikur
+SlangaApplication --> SlangaController
+
+@enduml
