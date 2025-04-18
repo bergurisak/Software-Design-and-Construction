@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="565.0" prefWidth="540.0" spacing="20.0" stylesheets="@css/slanga.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.slanga.SlangaController">
+  <padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+  </padding>
+   <AnchorPane prefHeight="462.0" prefWidth="500.0">
+      <children>
+         <Label fx:id="fxSkilabod1" layoutX="1.0" layoutY="330.0" prefHeight="49.0" prefWidth="239.0">
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+         </Label>
+         <Label fx:id="fxSkilabod2" layoutX="1.0" layoutY="391.0" prefHeight="49.0" prefWidth="239.0">
+            <opaqueInsets>
+               <Insets bottom="10.0" left="10.0" />
+            </opaqueInsets>
+            <cursor>
+               <Cursor fx:constant="DEFAULT" />
+            </cursor>
+         </Label>
+         <GridPane fx:id="fxBord" gridLinesVisible="true" layoutY="-1.0" prefHeight="313.0" prefWidth="500.0">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+         </GridPane>
+         <Button fx:id="fxNyrLeikur" layoutX="250.0" layoutY="330.0" mnemonicParsing="false" onAction="#nyrLeikurHandler" prefHeight="110.0" prefWidth="125.0" text="Nýr Leikur" />
+         <ImageView fx:id="fxTeningurMynd" fitHeight="110.0" fitWidth="110.0" layoutX="390.0" layoutY="330.0" pickOnBounds="true" preserveRatio="true" />
+         <Button fx:id="fxTeningur" layoutX="390.0" layoutY="330.0" mnemonicParsing="false" onAction="#teningurHandler" opacity="0.0" prefHeight="110.0" prefWidth="110.0" text="Teningur" />
+      </children>
+   </AnchorPane>
+</VBox>
